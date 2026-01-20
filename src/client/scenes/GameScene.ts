@@ -64,25 +64,8 @@ export class GameScene extends Phaser.Scene {
         this.gameState = state;
       });
 
-      // Listen to tank additions
-      room.state.tanks.onAdd((tank: TankSchema, key: string) => {
-        this.createTankSprite(tank);
-      });
-
-      // Listen to tank removals
-      room.state.tanks.onRemove((tank: TankSchema, key: string) => {
-        this.removeTankSprite(key);
-      });
-
-      // Listen to shell additions
-      room.state.shells.onAdd((shell: ShellSchema, key: string) => {
-        this.createShellSprite(shell);
-      });
-
-      // Listen to shell removals
-      room.state.shells.onRemove((shell: ShellSchema, key: string) => {
-        this.removeShellSprite(key);
-      });
+      // Tanks and shells are managed in update loop
+      // New entities will be created automatically when detected
 
       console.log('Connected to game room!');
     } catch (e) {
@@ -216,9 +199,35 @@ export class GameScene extends Phaser.Scene {
     // Update input
     this.inputManager.update();
 
+    const state = this.gameState; // Cache to avoid null checks in closures
+
+    // Clean up removed tanks
+    this.tankSprites.forEach((sprite, key) => {
+      if (!state.tanks.has(key)) {
+        this.removeTankSprite(key);
+      }
+    });
+
+    // Clean up removed shells
+    this.shellSprites.forEach((sprite, key) => {
+      let shellExists = false;
+      state.shells.forEach(shell => {
+        if (shell.id === key) {
+          shellExists = true;
+        }
+      });
+      if (!shellExists) {
+        this.removeShellSprite(key);
+      }
+    });
+
     // Update tank sprites
     this.gameState.tanks.forEach((tank: TankSchema) => {
-      const sprite = this.tankSprites.get(tank.id);
+      let sprite = this.tankSprites.get(tank.id);
+      if (!sprite) {
+        this.createTankSprite(tank);
+        sprite = this.tankSprites.get(tank.id);
+      }
       if (sprite) {
         sprite.setPosition(tank.x, tank.y);
         
@@ -258,7 +267,11 @@ export class GameScene extends Phaser.Scene {
 
     // Update shell sprites
     this.gameState.shells.forEach((shell: ShellSchema) => {
-      const sprite = this.shellSprites.get(shell.id);
+      let sprite = this.shellSprites.get(shell.id);
+      if (!sprite) {
+        this.createShellSprite(shell);
+        sprite = this.shellSprites.get(shell.id);
+      }
       if (sprite) {
         sprite.setPosition(shell.x, shell.y);
       }

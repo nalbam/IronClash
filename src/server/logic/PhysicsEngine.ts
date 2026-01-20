@@ -1,3 +1,4 @@
+import { MapSchema } from '@colyseus/schema';
 import { ShellSchema } from '../schemas/ShellSchema';
 import { TankSchema } from '../schemas/TankSchema';
 import { TerrainSchema } from '../schemas/TerrainSchema';
@@ -74,7 +75,7 @@ export class PhysicsEngine {
   static applyBlastDamage(
     explosionX: number,
     explosionY: number,
-    tanks: Map<string, TankSchema>
+    tanks: Map<string, TankSchema> | MapSchema<TankSchema>
   ): void {
     tanks.forEach(tank => {
       if (!tank.isAlive) return;
@@ -86,7 +87,7 @@ export class PhysicsEngine {
       if (distance <= CONST.BLAST_RADIUS) {
         const damage = this.calculateDamage(distance);
         tank.hp = Math.max(0, tank.hp - damage);
-        
+
         if (tank.hp <= 0) {
           tank.isAlive = false;
         }

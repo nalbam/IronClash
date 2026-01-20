@@ -16,7 +16,7 @@ export class NetworkManager {
   async joinRoom(): Promise<Colyseus.Room<GameState>> {
     try {
       this.room = await this.client.joinOrCreate<GameState>('game_room');
-      console.log('Joined room:', this.room.id);
+      console.log('Joined room:', this.room.roomId);
 
       // Listen to state changes
       this.room.onStateChange((state) => {
