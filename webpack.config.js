@@ -1,14 +1,21 @@
 const path = require('path');
+const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
+
+const SERVER_URL = process.env.SERVER_URL || 'ws://localhost:2567';
 
 module.exports = {
-  entry: './client/src/index.ts',
+  entry: './src/client/index.ts',
   module: {
     rules: [
       {
         test: /\.tsx?$/,
-        use: 'ts-loader',
+        use: {
+          loader: 'ts-loader',
+          options: {
+            configFile: 'tsconfig.client.json'
+          }
+        },
         exclude: /node_modules/,
       },
     ],
@@ -18,29 +25,23 @@ module.exports = {
   },
   output: {
     filename: 'bundle.js',
-    path: path.resolve(__dirname, 'client/dist'),
+    path: path.resolve(__dirname, 'public'),
+    clean: true,
   },
   plugins: [
-    new HtmlWebpackPlugin({
-      template: './client/index.html',
-      title: 'IronClash - Tank Battle',
+    new webpack.DefinePlugin({
+      'process.env.SERVER_URL': JSON.stringify(SERVER_URL),
     }),
-    new CopyWebpackPlugin({
-      patterns: [
-        { 
-          from: 'client/assets', 
-          to: 'assets',
-          noErrorOnMissing: true 
-        }
-      ],
+    new HtmlWebpackPlugin({
+      template: './src/client/index.html',
+      title: 'IronClash - Tank Battle',
     }),
   ],
   devServer: {
     static: {
-      directory: path.join(__dirname, 'client/dist'),
+      directory: path.join(__dirname, 'public'),
     },
     compress: true,
     port: 8080,
-    hot: true,
   },
 };

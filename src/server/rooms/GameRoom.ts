@@ -4,7 +4,7 @@ import { TankSchema } from '../schemas/TankSchema';
 import { ShellSchema } from '../schemas/ShellSchema';
 import { TerrainSchema } from '../schemas/TerrainSchema';
 import { PhysicsEngine } from '../logic/PhysicsEngine';
-import * as CONST from '../../../shared/src/constants';
+import * as CONST from '../../shared/constants';
 
 export class GameRoom extends Room<GameState> {
   private updateInterval?: NodeJS.Timeout;

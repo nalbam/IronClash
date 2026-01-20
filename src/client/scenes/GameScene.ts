@@ -1,10 +1,10 @@
 import * as Phaser from 'phaser';
 import { NetworkManager } from '../managers/NetworkManager';
 import { InputManager } from '../managers/InputManager';
-import { GameState } from '../../../server/src/schemas/GameState';
-import { TankSchema } from '../../../server/src/schemas/TankSchema';
-import { ShellSchema } from '../../../server/src/schemas/ShellSchema';
-import * as CONST from '../../../shared/src/constants';
+import { GameState } from '../../server/schemas/GameState';
+import { TankSchema } from '../../server/schemas/TankSchema';
+import { ShellSchema } from '../../server/schemas/ShellSchema';
+import * as CONST from '../../shared/constants';
 
 export class GameScene extends Phaser.Scene {
   private networkManager!: NetworkManager;

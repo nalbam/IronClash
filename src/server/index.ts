@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import { Server } from 'colyseus';
 import { createServer } from 'http';
 import express from 'express';

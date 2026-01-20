@@ -1,0 +1,15 @@
+.DS_Store
+.env
+.git
+.github
+.gitignore
+.nyc_output
+*.log
+*.md
+*.test.ts
+coverage
+dist
+docs
+node_modules
+npm-debug.log
+public

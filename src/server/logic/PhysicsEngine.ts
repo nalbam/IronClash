@@ -1,7 +1,7 @@
 import { ShellSchema } from '../schemas/ShellSchema';
 import { TankSchema } from '../schemas/TankSchema';
 import { TerrainSchema } from '../schemas/TerrainSchema';
-import * as CONST from '../../../shared/src/constants';
+import * as CONST from '../../shared/constants';
 
 export class PhysicsEngine {
   static updateShell(shell: ShellSchema, deltaTime: number, wind: number, terrain: TerrainSchema, gameWidth: number): boolean {

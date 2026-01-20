@@ -1,5 +1,5 @@
 import * as Colyseus from 'colyseus.js';
-import { GameState } from '../../../server/src/schemas/GameState';
+import { GameState } from '../../server/schemas/GameState';
 
 export class NetworkManager {
   private client: Colyseus.Client;
@@ -7,10 +7,9 @@ export class NetworkManager {
   private onStateChangeCallback: ((state: GameState) => void) | null = null;
 
   constructor() {
-    // For development, connect to localhost server
-    const serverUrl = 'ws://localhost:2567';
+    const serverUrl = process.env.SERVER_URL || 'ws://localhost:2567';
     this.client = new Colyseus.Client(serverUrl);
-    
+
     console.log('Connecting to:', serverUrl);
   }
 
