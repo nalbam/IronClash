@@ -7,7 +7,7 @@ import { PhysicsEngine } from '../logic/PhysicsEngine';
 import * as CONST from '../../../shared/src/constants';
 
 export class GameRoom extends Room<GameState> {
-  private updateInterval: NodeJS.Timeout;
+  private updateInterval?: NodeJS.Timeout;
   private lastUpdateTime: number = Date.now();
   private shellIdCounter: number = 0;
 

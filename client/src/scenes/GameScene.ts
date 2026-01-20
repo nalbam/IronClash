@@ -7,22 +7,22 @@ import { ShellSchema } from '../../../server/src/schemas/ShellSchema';
 import * as CONST from '../../../shared/src/constants';
 
 export class GameScene extends Phaser.Scene {
-  private networkManager: NetworkManager;
-  private inputManager: InputManager;
+  private networkManager!: NetworkManager;
+  private inputManager!: InputManager;
   private gameState: GameState | null = null;
   
   // Visual elements
   private tankSprites: Map<string, Phaser.GameObjects.Container> = new Map();
   private shellSprites: Map<string, Phaser.GameObjects.Arc> = new Map();
-  private terrainGraphics: Phaser.GameObjects.Graphics;
-  private groundGraphics: Phaser.GameObjects.Graphics;
+  private terrainGraphics!: Phaser.GameObjects.Graphics;
+  private groundGraphics!: Phaser.GameObjects.Graphics;
   
   // UI elements
-  private hpText: Phaser.GameObjects.Text;
-  private angleText: Phaser.GameObjects.Text;
-  private shellCountText: Phaser.GameObjects.Text;
-  private windText: Phaser.GameObjects.Text;
-  private statusText: Phaser.GameObjects.Text;
+  private hpText!: Phaser.GameObjects.Text;
+  private angleText!: Phaser.GameObjects.Text;
+  private shellCountText!: Phaser.GameObjects.Text;
+  private windText!: Phaser.GameObjects.Text;
+  private statusText!: Phaser.GameObjects.Text;
   private mySessionId: string = '';
 
   constructor() {
@@ -60,29 +60,29 @@ export class GameScene extends Phaser.Scene {
       this.mySessionId = room.sessionId;
       
       // Listen to state changes
-      room.state.onChange = () => {
-        this.gameState = room.state;
-      };
+      room.onStateChange((state) => {
+        this.gameState = state;
+      });
 
       // Listen to tank additions
-      room.state.tanks.onAdd = (tank: TankSchema, key: string) => {
+      room.state.tanks.onAdd((tank: TankSchema, key: string) => {
         this.createTankSprite(tank);
-      };
+      });
 
       // Listen to tank removals
-      room.state.tanks.onRemove = (tank: TankSchema, key: string) => {
+      room.state.tanks.onRemove((tank: TankSchema, key: string) => {
         this.removeTankSprite(key);
-      };
+      });
 
       // Listen to shell additions
-      room.state.shells.onAdd = (shell: ShellSchema, key: string) => {
+      room.state.shells.onAdd((shell: ShellSchema, key: string) => {
         this.createShellSprite(shell);
-      };
+      });
 
       // Listen to shell removals
-      room.state.shells.onRemove = (shell: ShellSchema, key: string) => {
+      room.state.shells.onRemove((shell: ShellSchema, key: string) => {
         this.removeShellSprite(key);
-      };
+      });
 
       console.log('Connected to game room!');
     } catch (e) {
@@ -322,8 +322,11 @@ export class GameScene extends Phaser.Scene {
     // Draw terrain outline
     for (let i = 0; i < terrain.heights.length; i++) {
       const x = i * segmentWidth;
-      const y = CONST.GAME_HEIGHT - terrain.heights[i];
-      this.groundGraphics.lineTo(x, y);
+      const height = terrain.heights[i];
+      if (height !== undefined) {
+        const y = CONST.GAME_HEIGHT - height;
+        this.groundGraphics.lineTo(x, y);
+      }
     }
     
     // Complete the shape
@@ -337,12 +340,15 @@ export class GameScene extends Phaser.Scene {
     
     for (let i = 0; i < terrain.heights.length; i++) {
       const x = i * segmentWidth;
-      const y = CONST.GAME_HEIGHT - terrain.heights[i];
-      
-      if (i === 0) {
-        this.terrainGraphics.moveTo(x, y);
-      } else {
-        this.terrainGraphics.lineTo(x, y);
+      const height = terrain.heights[i];
+      if (height !== undefined) {
+        const y = CONST.GAME_HEIGHT - height;
+        
+        if (i === 0) {
+          this.terrainGraphics.moveTo(x, y);
+        } else {
+          this.terrainGraphics.lineTo(x, y);
+        }
       }
     }
     
