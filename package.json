@@ -1,6 +1,6 @@
 {
   "name": "ironclash",
-  "version": "1.0.0",
+  "version": "1.0.0.dev0",
   "description": "3v3 Real-time Tank Battle Game (Fortress Style)",
   "scripts": {
     "start": "npm run dev:server & npm run dev:client",
