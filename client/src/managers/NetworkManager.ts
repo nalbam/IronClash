@@ -7,12 +7,8 @@ export class NetworkManager {
   private onStateChangeCallback: ((state: GameState) => void) | null = null;
 
   constructor() {
-    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const host = window.location.hostname;
-    const port = process.env.SERVER_PORT || '2567';
-    
-    // For development, use localhost
-    const serverUrl = `${protocol}//${host}:${port}`;
+    // For development, connect to localhost server
+    const serverUrl = 'ws://localhost:2567';
     this.client = new Colyseus.Client(serverUrl);
     
     console.log('Connecting to:', serverUrl);
